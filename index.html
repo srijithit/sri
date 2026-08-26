@@ -74,8 +74,19 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 1.2rem 3rem;
     display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(to bottom, rgba(5,8,16,.95), transparent);
+    background: linear-gradient(to bottom, rgba(5,8,16,.5), transparent);
     backdrop-filter: blur(2px);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+  }
+  nav.nav-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  nav.nav-scrolled {
+    background: rgba(5, 8, 16, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
   }
   .nav-logo {
     font-family: 'Syne', sans-serif;
@@ -88,8 +99,9 @@
   .nav-logo span { color: var(--text); }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
-    color: var(--muted); text-decoration: none;
-    font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+    color: #ffffff; text-decoration: none;
+    font-size: .75rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
     transition: color .2s;
     position: relative;
     cursor: none;
@@ -106,150 +118,187 @@
   /* ── SECTIONS ── */
   section { position: relative; z-index: 1; }
 
-  /* ── HERO ── */
+  /* ── HERO SCROLL ANIMATION ── */
+  /* ── FULL SCREEN HERO SCROLL ── */
   #hero {
-    min-height: 100vh;
-    display: grid; place-items: center;
-    padding: 6rem 3rem 4rem;
+    position: relative;
+    height: 400vh;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+  }
+  .hero-sticky-stage {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center;
-    max-width: 1100px; width: 100%;
+  #hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    display: block;
   }
-  .hero-text { position: relative; }
-  .hero-eyebrow {
-    font-size: .7rem; letter-spacing: .25em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: .8rem;
-    opacity: 0; animation: fadeUp .6s .2s forwards;
+  .hero-center-content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 2.5rem;
   }
-  .hero-eyebrow::before {
-    content: ''; width: 30px; height: 1px; background: var(--accent);
+  .hero-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    opacity: 1;
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
   }
-  .hero-name {
+  .hero-stage.fade-out {
+    opacity: 0;
+    transform: translateY(30px);
+    pointer-events: none;
+  }
+  .hero-mega-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 800; line-height: .95;
-    letter-spacing: -.04em;
-    opacity: 0; animation: fadeUp .6s .35s forwards;
+    font-size: clamp(3.5rem, 11vw, 9.5rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0 4px 25px rgba(0,0,0,0.5);
   }
-  .hero-name .highlight {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-role {
-    margin-top: 1rem; font-size: 1rem; color: var(--muted);
-    opacity: 0; animation: fadeUp .6s .5s forwards;
-    display: flex; align-items: center; gap: .6rem;
-  }
-  .role-badge {
-    display: inline-flex; align-items: center; gap: .4rem;
-    padding: .3rem .8rem; border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+  .hero-mega-title .title-cyan {
     color: var(--accent);
-    animation: pulse-border 2s infinite;
   }
-  .role-badge::before {
-    content: ''; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-    animation: blink 1.4s infinite;
+  .hero-mega-title .title-white {
+    color: #ffffff;
   }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  @keyframes pulse-border {
-    0%,100%{ box-shadow: 0 0 0 0 rgba(0,245,196,.25) }
-    50%{ box-shadow: 0 0 0 6px rgba(0,245,196,0) }
+  .hero-stage-sub {
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #ffffff;
+    max-width: 720px;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
-  .hero-desc {
-    margin-top: 1.8rem;
-    font-size: .85rem; line-height: 1.8; color: var(--muted);
-    max-width: 420px;
-    opacity: 0; animation: fadeUp .6s .65s forwards;
+  .hero-stage-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .hero-cta {
-    margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
-    opacity: 0; animation: fadeUp .6s .8s forwards;
+  .hero-stage-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    max-width: 700px;
   }
+  .hero-pill {
+    padding: 0.5rem 1.2rem;
+    background: rgba(5,8,16,0.7);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(12px);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    text-transform: uppercase;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .hero-scroll-prompt {
+    position: absolute;
+    bottom: 2.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    animation: bounce-subtle 2s infinite ease-in-out;
+  }
+  .hero-scroll-prompt.fade-out {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+    animation: none;
+  }
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translate(-50%, 0); opacity: 0.75; }
+    50% { transform: translate(-50%, 6px); opacity: 1; color: var(--accent); }
+  }
+  .hero-scroll-prompt .scroll-arrow {
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
   .btn {
-    display: inline-flex; justify-content: center; align-items: center; gap: .5rem;
-    padding: .75rem 1.8rem; border-radius: 6px;
-    font-family: 'DM Mono', monospace; font-size: .75rem;
-    letter-spacing: .1em; text-transform: uppercase; text-align: center;
-    text-decoration: none; cursor: none;
-    transition: transform .2s, box-shadow .2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    padding: .85rem 2rem;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: none;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
   }
   .btn:hover { transform: translateY(-2px); }
   .btn-primary {
-    background: var(--accent); color: #050810;
-    box-shadow: 0 0 20px rgba(0,245,196,.3);
+    background: var(--accent);
+    color: #050810;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(0,245,196,.35);
   }
-  .btn-primary:hover { box-shadow: 0 0 35px rgba(0,245,196,.5); }
+  .btn-primary:hover { box-shadow: 0 0 40px rgba(0,245,196,.6); }
   .btn-outline {
-    border: 1px solid var(--border); color: var(--text);
+    background: rgba(5,8,16,0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    color: var(--text);
   }
   .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* Hero image */
-  .hero-image-wrap {
-    position: relative;
-    opacity: 0; animation: fadeIn .8s .4s forwards;
-  }
-  .hero-img-frame img-frame img-frame {
-    position: relative; width: 340px; height: 400px;
-    margin: auto;
-  }
-  .hero-img-frame img-frame img-frame::before {
-    content: '';
-    position: absolute; inset: -2px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
-    border-radius: 20px; z-index: -1;
-    animation: border-rotate 4s linear infinite;
-  }
-  @keyframes border-rotate {
-    0%{ filter: hue-rotate(0deg) }
-    100%{ filter: hue-rotate(360deg) }
-  }
-  .hero-img-frame img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    border-radius: 18px;
-    display: block;
-    filter: saturate(.9) contrast(1.05);
-  }
-  .hero-img-frame img-card {
-    position: absolute; bottom: -20px; right: -30px;
-    background: var(--card); border: 1px solid var(--border);
-    backdrop-filter: blur(12px);
-    border-radius: 12px; padding: .9rem 1.2rem;
-    display: flex; align-items: center; gap: .8rem;
-    animation: float 4s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%,100%{ transform: translateY(0) }
-    50%{ transform: translateY(-8px) }
-  }
-  .card-icon { font-size: 1.5rem; }
-  .card-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
-  .card-value { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
-
-  /* Floating shapes */
-  .shape {
-    position: absolute; border-radius: 50%;
-    filter: blur(60px); pointer-events: none;
-    animation: drift 8s ease-in-out infinite;
-  }
-  .shape-1 { width: 300px; height: 300px; background: rgba(123,92,255,.12); top: -10%; left: -15%; animation-delay: 0s; }
-  .shape-2 { width: 200px; height: 200px; background: rgba(0,245,196,.08); bottom: 10%; right: -5%; animation-delay: -3s; }
-  @keyframes drift {
-    0%,100%{ transform: translate(0,0) }
-    33%{ transform: translate(20px,-15px) }
-    66%{ transform: translate(-10px, 20px) }
-  }
 
   /* ── ABOUT ── */
   #about {
@@ -474,7 +523,38 @@
 
   /* ── RESPONSIVE adjustments ── */
   @media (max-width: 768px) {
+    .hero-center-content {
+      padding: 0 1.2rem;
+    }
+    .hero-mega-title {
+      font-size: clamp(2.8rem, 11vw, 5rem);
+      margin-bottom: 1rem;
+    }
+    .hero-stage-sub {
+      font-size: 0.78rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-stage-actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 280px;
+    }
+    .hero-stage-actions .btn {
+      width: 100%;
+    }
+    .hero-stage-pills {
+      gap: 0.5rem;
+    }
+    .hero-pill {
+      font-size: 0.68rem;
+      padding: 0.4rem 0.9rem;
+    }
+
     nav { 
+      padding: 1.2rem 1.5rem; 
+      flex-direction: column; 
+      gap: 1rem;
+    }
       padding: 1.2rem 1.5rem; 
       flex-direction: column; 
       gap: 1rem;
@@ -484,38 +564,6 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-    .hero-inner { 
-      grid-template-columns: 1fr; 
-      text-align: center; 
-      margin-top: 3rem; 
-   .hero-img-frame img-frame {
-  position: relative;
-  max-width: 100%; 
-  height: auto; 
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hero-img-frame img {
-  width: 100%; 
-  max-width: 380px; /* Keeps the image from getting too massive on big screens */
-  height: auto; 
-  display: block;
-  border-radius: 24px; /* Matches the smooth rounded corners in your screenshot */
-  object-fit: contain;
-}
-    }
-    .hero-img-frame img-card { 
-      right: -10px; 
-      bottom: -15px; 
-      padding: .6rem .8rem; 
-    }
-    .hero-eyebrow, .hero-cta { justify-content: center; }
-    .hero-role { justify-content: center; }
-    .hero-desc { margin: 1.8rem auto 0; }
-    
     .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
     #about, #skills, #projects, #contact { padding: 5rem 1.5rem; }
     
@@ -545,37 +593,17 @@
   </ul>
 </nav>
 
-<section id="hero">
-  <div class="shape shape-1"></div>
-  <div class="shape shape-2"></div>
-  <div class="hero-inner">
-    <div class="hero-text">
-      <div class="hero-eyebrow">Portfolio</div>
-      <h1 class="hero-name">
-        I'm<br><span class="highlight">Srijith</span>
-      </h1>
-      <div class="hero-role">
-        <span class="role-badge">Available for work</span>
-      </div>
-      <p class="hero-desc">
-        BTech Information Technology student at SNS College of Technology, Coimbatore.
-        Passionate about building digital experiences — from apps to IoT.
-      </p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View Projects →</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
-      </div>
-    </div>
+<section id="hero" class="hero-scroll-wrapper">
+  <div class="hero-sticky-stage">
+    <!-- Full-screen Canvas Background -->
+    <canvas id="hero-canvas"></canvas>
     
-    <div class="hero-image-wrap">
-      <div class="hero-img-frame">
-        <img src="https://github.com/srijithit/sri/blob/main/srixx1.jpg?raw=true" alt="Srijith" onerror="this.src='https://via.placeholder.com/340x400/0d1525/00f5c4?text=S'">
-     
-            
-            <div>
-              
-            </div>
-        </div>
+    <!-- Mega Center Stage Content -->
+    <div class="hero-center-content">
+      <div class="hero-stage hero-stage-1 active" id="hero-stage-1">
+        <h1 class="hero-mega-title">
+          <span class="title-cyan">SRI</span><span class="title-white">JITH</span>
+        </h1>
       </div>
     </div>
   </div>
@@ -1031,6 +1059,141 @@
     requestAnimationFrame(drawBg);
   }
   drawBg();
+
+  // ── HERO SCROLL ANIMATION ENGINE ──
+  const heroSection = document.getElementById('hero');
+  const heroCanvas = document.getElementById('hero-canvas');
+  const heroCtx = heroCanvas ? heroCanvas.getContext('2d') : null;
+
+  const TOTAL_FRAMES = 181; // Frames 0 to 180 (stops at sunglasses pose)
+  const frames = [];
+  let currentFrameIndex = 0;
+  let targetFrameIndex = 0;
+
+  // Preload frames
+  for (let i = 0; i < TOTAL_FRAMES; i++) {
+    const img = new Image();
+    const numStr = String(i).padStart(3, '0');
+    img.src = `hero_frames/frame_${numStr}.webp?v=2`;
+    img.onload = () => {
+      if (i === 0) {
+        resizeHeroCanvas();
+      }
+    };
+    frames.push(img);
+  }
+
+  function resizeHeroCanvas() {
+    if (!heroCanvas || !heroCtx) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    heroCanvas.width = window.innerWidth * dpr;
+    heroCanvas.height = window.innerHeight * dpr;
+    renderHeroFrame(Math.round(currentFrameIndex));
+  }
+  window.addEventListener('resize', resizeHeroCanvas);
+
+  function drawScaledImage(img) {
+    if (!heroCanvas || !heroCtx) return;
+    const cw = heroCanvas.width;
+    const ch = heroCanvas.height;
+    const iw = img.naturalWidth || 1080;
+    const ih = img.naturalHeight || 1920;
+    heroCtx.clearRect(0, 0, cw, ch);
+    heroCtx.imageSmoothingEnabled = true;
+    heroCtx.imageSmoothingQuality = 'high';
+
+    const scale = Math.max(cw / iw, ch / ih);
+    const nw = iw * scale;
+    const nh = ih * scale;
+    const nx = (cw - nw) / 2;
+
+    // Smart vertical framing: keep face prominently framed on desktop widescreen
+    let ny = 0;
+    if (nh > ch) {
+      // Anchor face (approx 20% down image) at ~30% from top of screen
+      const targetFaceY = ch * 0.30;
+      const faceOffset = nh * 0.20;
+      ny = targetFaceY - faceOffset;
+      // Clamp between (ch - nh) and 0 so the canvas stays completely filled
+      ny = Math.min(0, Math.max(ch - nh, ny));
+    } else {
+      ny = (ch - nh) / 2;
+    }
+
+    heroCtx.drawImage(img, nx, ny, nw, nh);
+  }
+
+  function renderHeroFrame(frameIdx) {
+    if (!heroCanvas || !heroCtx) return;
+    const clampedIdx = Math.max(0, Math.min(TOTAL_FRAMES - 1, frameIdx));
+    const img = frames[clampedIdx];
+
+    if (img && img.complete && img.naturalWidth > 0) {
+      drawScaledImage(img);
+      return;
+    }
+
+    // Fallback to nearest loaded frame
+    for (let offset = 1; offset < 30; offset++) {
+      const prev = frames[clampedIdx - offset];
+      if (prev && prev.complete && prev.naturalWidth > 0) {
+        drawScaledImage(prev);
+        return;
+      }
+      const next = frames[clampedIdx + offset];
+      if (next && next.complete && next.naturalWidth > 0) {
+        drawScaledImage(next);
+        return;
+      }
+    }
+  }
+
+  const heroStage = document.getElementById('hero-stage-1');
+  const mainNav = document.querySelector('nav');
+
+  function updateHeroScroll() {
+    if (!heroSection) return;
+    const rect = heroSection.getBoundingClientRect();
+    const totalDist = heroSection.offsetHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    let progress = totalDist > 0 ? scrolled / totalDist : 0;
+    progress = Math.max(0, Math.min(1, progress));
+
+    targetFrameIndex = progress * (TOTAL_FRAMES - 1);
+    currentFrameIndex += (targetFrameIndex - currentFrameIndex) * 0.18;
+
+    renderHeroFrame(Math.round(currentFrameIndex));
+
+    // Hide headline text after first scroll
+    if (progress > 0.025) {
+      if (heroStage && !heroStage.classList.contains('fade-out')) heroStage.classList.add('fade-out');
+    } else {
+      if (heroStage && heroStage.classList.contains('fade-out')) heroStage.classList.remove('fade-out');
+    }
+
+    // Hide navbar after first scroll and show it again after the hero section
+    if (mainNav) {
+      if (progress > 0.025 && progress < 0.96) {
+        mainNav.classList.add('nav-hidden');
+        mainNav.classList.remove('nav-scrolled');
+      } else {
+        mainNav.classList.remove('nav-hidden');
+        if (progress >= 0.96) {
+          mainNav.classList.add('nav-scrolled');
+        } else {
+          mainNav.classList.remove('nav-scrolled');
+        }
+      }
+    }
+
+    requestAnimationFrame(updateHeroScroll);
+  }
+
+  // Initialize canvas on DOM ready
+  setTimeout(() => {
+    resizeHeroCanvas();
+    requestAnimationFrame(updateHeroScroll);
+  }, 100);
 
   // ── SCROLL REVEAL ──
   const reveals = document.querySelectorAll('.reveal');
