@@ -32,6 +32,9 @@ Welcome to the official repository for my personal developer portfolio website. 
 
 | Project Name | Description | Tech Stack | Live Demo |
 | :--- | :--- | :--- | :---: |
+| **Royaal CRM** | WhatsApp CRM & shared team inbox platform with lead pipeline, broadcast campaigns, and Meta Cloud API integration. | Next.js, React, WhatsApp API | [App Demo](https://royaalcrm.vercel.app/) / [Landing](https://royaal-crm.vercel.app/) |
+| **ApplyFlow AI** | Standalone Windows desktop tool (.exe) for automated job outreach with personalized emails and Gmail SMTP dispatch. | Python, Gmail SMTP, Desktop (.exe) | Windows (.exe) |
+| **AI Job Scraper** | Standalone Windows desktop app (.exe) for automated job discovery and structured listing extraction. | Python, Web Scraping, Desktop (.exe) | Windows (.exe) |
 | **ZAXO Clothing & Uniforms** | Full-scale B2B uniform manufacturing platform featuring an interactive bulk pricing calculator & fabric inspector. | HTML5, JavaScript, UI/UX | [Live Demo](https://zaxo-clothing.vercel.app/) |
 | **ZAXO Medical Apparel** | Premium e-commerce platform for high-performance medical scrubs, lab coats, and custom logo embroidery. | Next.js, React, Tailwind CSS | [Live Demo](https://zaxo-six.vercel.app/) |
 | **Secure Login System** | Robust authentication platform with bcrypt hashing, rate limiting, 2FA, and SQL injection prevention. | Node.js, Express, SQLite | [Live Demo](https://secure-login-swart.vercel.app/) |
