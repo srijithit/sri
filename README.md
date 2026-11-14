@@ -32,7 +32,8 @@ Welcome to the official repository for my personal developer portfolio website. 
 
 | Project Name | Description | Tech Stack | Live Demo |
 | :--- | :--- | :--- | :---: |
-| **Royaal CRM** | WhatsApp CRM & shared team inbox platform with lead pipeline, broadcast campaigns, and Meta Cloud API integration. | Next.js, React, WhatsApp API | [App Demo](https://royaalcrm.vercel.app/) / [Landing](https://royaal-crm.vercel.app/) |
+| **Royaal CRM (App)** | Full-stack WhatsApp CRM & multi-agent shared team inbox platform with lead pipelines, broadcasts, and Meta API integration. | Next.js, React, WhatsApp API | [Live Demo](https://royaalcrm.vercel.app/) |
+| **Royaal CRM (Landing Page)** | Official product marketing and customer onboarding landing page with pricing ledger and direct WhatsApp checkout. | HTML/CSS, UI/UX, Web Design | [Live Demo](https://royaal-crm.vercel.app/) |
 | **ApplyFlow AI** | Standalone Windows desktop tool (.exe) for automated job outreach with personalized emails and Gmail SMTP dispatch. | Python, Gmail SMTP, Desktop (.exe) | Windows (.exe) |
 | **AI Job Scraper** | Standalone Windows desktop app (.exe) for automated job discovery and structured listing extraction. | Python, Web Scraping, Desktop (.exe) | Windows (.exe) |
 | **ZAXO Clothing & Uniforms** | Full-scale B2B uniform manufacturing platform featuring an interactive bulk pricing calculator & fabric inspector. | HTML5, JavaScript, UI/UX | [Live Demo](https://zaxo-clothing.vercel.app/) |
