@@ -1159,28 +1159,98 @@
     const iw = img.naturalWidth || 1080;
     const ih = img.naturalHeight || 1920;
     heroCtx.clearRect(0, 0, cw, ch);
+
+    const aspect = cw / ch;
+
+    // ── MOBILE / PORTRAIT SCREENS (Aspect ratio <= 0.95) ──
+    // Retain original full-bleed portrait cover behavior (tested & loved on mobile)
+    if (aspect <= 0.95) {
+      heroCtx.imageSmoothingEnabled = true;
+      heroCtx.imageSmoothingQuality = 'high';
+      const scale = Math.max(cw / iw, ch / ih);
+      const nw = iw * scale;
+      const nh = ih * scale;
+      const nx = (cw - nw) / 2;
+
+      let ny = 0;
+      if (nh > ch) {
+        const targetFaceY = ch * 0.30;
+        const faceOffset = nh * 0.20;
+        ny = targetFaceY - faceOffset;
+        ny = Math.min(0, Math.max(ch - nh, ny));
+      } else {
+        ny = (ch - nh) / 2;
+      }
+
+      heroCtx.drawImage(img, nx, ny, nw, nh);
+      return;
+    }
+
+    // ── DESKTOP / WIDESCREEN ENHANCED DUAL-LAYER CINEMA RENDER ──
+    // Eliminates massive 1.8x-3x stretching blur, displaying the full subject in ultra-crisp resolution
+
+    // 1. Ambient Background Layer: Atmospheric blurred & dimmed fill across widescreen
+    try {
+      heroCtx.save();
+      if ('filter' in heroCtx) {
+        heroCtx.filter = 'blur(45px) brightness(0.35) saturate(1.25)';
+      }
+      const bgScale = Math.max(cw / iw, ch / ih);
+      const bgW = iw * bgScale;
+      const bgH = ih * bgScale;
+      const bgX = (cw - bgW) / 2;
+      const bgY = (ch - bgH) / 2;
+      heroCtx.drawImage(img, bgX, bgY, bgW, bgH);
+      heroCtx.restore();
+    } catch (e) {
+      // Fallback if browser security or filter differs
+    }
+
+    // Dark gradient veil to blend ambient lighting into portfolio theme (#050810)
+    heroCtx.fillStyle = 'rgba(5, 8, 16, 0.42)';
+    heroCtx.fillRect(0, 0, cw, ch);
+
+    // 2. Razor-Sharp Foreground Character: Height-fitted native downscaling (crystal clear!)
     heroCtx.imageSmoothingEnabled = true;
     heroCtx.imageSmoothingQuality = 'high';
 
-    const scale = Math.max(cw / iw, ch / ih);
-    const nw = iw * scale;
-    const nh = ih * scale;
-    const nx = (cw - nw) / 2;
+    // Scale so height fills the viewport gracefully showing the full suit, tie, hair & sunglasses
+    const fgScale = (ch * 1.02) / ih;
+    const fgW = iw * fgScale;
+    const fgH = ih * fgScale;
+    const fgX = (cw - fgW) / 2;
+    const fgY = (ch - fgH) / 2;
 
-    // Smart vertical framing: keep face prominently framed on desktop widescreen
-    let ny = 0;
-    if (nh > ch) {
-      // Anchor face (approx 20% down image) at ~30% from top of screen
-      const targetFaceY = ch * 0.30;
-      const faceOffset = nh * 0.20;
-      ny = targetFaceY - faceOffset;
-      // Clamp between (ch - nh) and 0 so the canvas stays completely filled
-      ny = Math.min(0, Math.max(ch - nh, ny));
-    } else {
-      ny = (ch - nh) / 2;
-    }
+    heroCtx.drawImage(img, fgX, fgY, fgW, fgH);
 
-    heroCtx.drawImage(img, nx, ny, nw, nh);
+    // 3. Smooth Edge Feathers: Seamlessly dissolve left/right borders into ambient background
+    const featherWidth = Math.min(100, fgW * 0.22);
+
+    const leftFade = heroCtx.createLinearGradient(fgX, 0, fgX + featherWidth, 0);
+    leftFade.addColorStop(0, 'rgba(5, 8, 16, 0.95)');
+    leftFade.addColorStop(1, 'rgba(5, 8, 16, 0)');
+    heroCtx.fillStyle = leftFade;
+    heroCtx.fillRect(fgX - 5, 0, featherWidth + 5, ch);
+
+    const rightFade = heroCtx.createLinearGradient(fgX + fgW - featherWidth, 0, fgX + fgW, 0);
+    rightFade.addColorStop(0, 'rgba(5, 8, 16, 0)');
+    rightFade.addColorStop(1, 'rgba(5, 8, 16, 0.95)');
+    heroCtx.fillStyle = rightFade;
+    heroCtx.fillRect(fgX + fgW - featherWidth, 0, featherWidth + 5, ch);
+
+    // Top fade for seamless navbar integration
+    const topFade = heroCtx.createLinearGradient(0, 0, 0, 100);
+    topFade.addColorStop(0, 'rgba(5, 8, 16, 0.85)');
+    topFade.addColorStop(1, 'rgba(5, 8, 16, 0)');
+    heroCtx.fillStyle = topFade;
+    heroCtx.fillRect(0, 0, cw, 100);
+
+    // Bottom fade for text and scroll prompt integration
+    const btmFade = heroCtx.createLinearGradient(0, ch - 140, 0, ch);
+    btmFade.addColorStop(0, 'rgba(5, 8, 16, 0)');
+    btmFade.addColorStop(1, 'rgba(5, 8, 16, 0.9)');
+    heroCtx.fillStyle = btmFade;
+    heroCtx.fillRect(0, ch - 140, cw, 140);
   }
 
   function renderHeroFrame(frameIdx) {
