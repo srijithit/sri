@@ -122,7 +122,7 @@
   /* ── FULL SCREEN HERO SCROLL ── */
   #hero {
     position: relative;
-    height: 400vh;
+    height: 280vh;
     padding: 0;
     margin: 0;
     overflow: visible;
@@ -142,6 +142,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    perspective: 1200px;
   }
   #hero-canvas {
     position: absolute;
@@ -266,6 +267,162 @@
   .hero-scroll-prompt .scroll-arrow {
     font-size: 0.95rem;
     line-height: 1;
+  }
+
+  /* ── FLOATING CINEMATIC 3D CARDS (HERO BILATERAL STREAM) ── */
+  .hero-float-col {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(230px, 20vw, 305px);
+    z-index: 4;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    perspective: 1200px;
+  }
+  .hero-float-left {
+    left: clamp(1rem, 2.6vw, 3.5rem);
+    align-items: flex-start;
+  }
+  .hero-float-right {
+    right: clamp(1rem, 2.6vw, 3.5rem);
+    align-items: flex-end;
+  }
+
+  a.float-card {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .float-card {
+    position: absolute;
+    width: 100%;
+    max-width: 300px;
+    padding: 0.82rem 1.05rem;
+    background: rgba(8, 14, 26, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 229, 195, 0.22);
+    border-radius: 14px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 229, 195, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #e2e8f0;
+    will-change: transform, opacity;
+    opacity: 0;
+    transform: translateY(120vh) scale(0.85);
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .float-card:hover {
+    border-color: rgba(0, 229, 195, 0.75);
+    background: rgba(10, 20, 36, 0.90);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 28px rgba(0, 229, 195, 0.28);
+  }
+
+  .float-card-icon {
+    font-size: 1.45rem;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 8px rgba(0, 229, 195, 0.35));
+  }
+
+  .float-card-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .float-card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .float-card-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.66rem;
+    color: #94a3b8;
+    line-height: 1.35;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .float-card-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0, 229, 195, 0.1);
+    border: 1px solid rgba(0, 229, 195, 0.25);
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .float-header-card {
+    background: linear-gradient(135deg, rgba(0, 229, 195, 0.16), rgba(123, 92, 255, 0.16));
+    border-color: rgba(0, 229, 195, 0.45);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    padding: 0.82rem 1.1rem;
+  }
+  .float-header-card .float-card-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+  }
+  .float-header-card .float-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 1100px) {
+    .hero-float-col {
+      width: clamp(200px, 21vw, 250px);
+    }
+    .hero-float-left {
+      left: 1rem;
+    }
+    .hero-float-right {
+      right: 1rem;
+    }
+    .float-card {
+      padding: 0.7rem 0.9rem;
+      gap: 0.65rem;
+    }
+    .float-card-name {
+      font-size: 0.8rem;
+    }
+    .float-card-desc {
+      font-size: 0.62rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-float-col {
+      display: none !important;
+    }
   }
 
   .btn {
@@ -595,15 +752,163 @@
 
 <section id="hero" class="hero-scroll-wrapper">
   <div class="hero-sticky-stage">
-    <!-- Full-screen Canvas Background -->
+    <!-- Full-screen Canvas Background with Cinematic Walking Subject -->
     <canvas id="hero-canvas"></canvas>
-    
+
+    <!-- Left-Side Floating Technical Skills Stream -->
+    <div class="hero-float-col hero-float-left" id="hero-float-left">
+      <a href="#skills" class="float-card float-header-card" data-idx="0">
+        <span class="float-card-pill">⚡ TECHNICAL ARSENAL</span>
+        <span class="float-card-title">My Technical Skills</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="1">
+        <span class="float-card-icon">🐍</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Python</div>
+          <div class="float-card-desc">AI, PyTorch, NumPy &amp; Scripts</div>
+        </div>
+        <span class="float-card-badge">Core</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="2">
+        <span class="float-card-icon">☕</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Java</div>
+          <div class="float-card-desc">OOP, Data Structures &amp; Backend</div>
+        </div>
+        <span class="float-card-badge">Robust</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="3">
+        <span class="float-card-icon">⚛️</span>
+        <div class="float-card-info">
+          <div class="float-card-name">React.js</div>
+          <div class="float-card-desc">Component Architecture &amp; Hooks</div>
+        </div>
+        <span class="float-card-badge">Frontend</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="4">
+        <span class="float-card-icon">▲</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Next.js</div>
+          <div class="float-card-desc">SSR, App Router &amp; Server Actions</div>
+        </div>
+        <span class="float-card-badge">Fullstack</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="5">
+        <span class="float-card-icon">🟢</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Node.js</div>
+          <div class="float-card-desc">REST APIs, Express &amp; Microservices</div>
+        </div>
+        <span class="float-card-badge">Runtime</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="6">
+        <span class="float-card-icon">🧠</span>
+        <div class="float-card-info">
+          <div class="float-card-name">AI &amp; Machine Learning</div>
+          <div class="float-card-desc">RAG Systems, LLMs &amp; Pipelines</div>
+        </div>
+        <span class="float-card-badge">AI / ML</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="7">
+        <span class="float-card-icon">🌐</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Full Stack Development</div>
+          <div class="float-card-desc">End-to-End Enterprise SaaS</div>
+        </div>
+        <span class="float-card-badge">Build</span>
+      </a>
+      <a href="#skills" class="float-card" data-idx="8">
+        <span class="float-card-icon">🛠️</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Tools &amp; Technologies</div>
+          <div class="float-card-desc">Docker, Git, Meta APIs, Vercel</div>
+        </div>
+        <span class="float-card-badge">DevOps</span>
+      </a>
+    </div>
+
+    <!-- Right-Side Floating Projects Stream -->
+    <div class="hero-float-col hero-float-right" id="hero-float-right">
+      <a href="#projects" class="float-card float-header-card" data-idx="0">
+        <span class="float-card-pill">🚀 FEATURED WORK</span>
+        <span class="float-card-title">My Projects</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="1">
+        <span class="float-card-icon">🐄</span>
+        <div class="float-card-info">
+          <div class="float-card-name">CattleScope AI</div>
+          <div class="float-card-desc">Automated Cattle Biometrics &amp; Health</div>
+        </div>
+        <span class="float-card-badge">AI Vision</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="2">
+        <span class="float-card-icon">💬</span>
+        <div class="float-card-info">
+          <div class="float-card-name">WhatsApp CRM</div>
+          <div class="float-card-desc">Shared Inbox &amp; Meta Cloud API</div>
+        </div>
+        <span class="float-card-badge">SaaS</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="3">
+        <span class="float-card-icon">🤖</span>
+        <div class="float-card-info">
+          <div class="float-card-name">AI Support Agent</div>
+          <div class="float-card-desc">Autonomous Multi-Channel Agent</div>
+        </div>
+        <span class="float-card-badge">Agentic</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="4">
+        <span class="float-card-icon">⚡</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Job Scraper &amp; Automation</div>
+          <div class="float-card-desc">Automated Scraper &amp; ApplyFlow (.exe)</div>
+        </div>
+        <span class="float-card-badge">Auto</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="5">
+        <span class="float-card-icon">🔐</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Secure Login System</div>
+          <div class="float-card-desc">OAuth, JWT &amp; Enterprise RBAC</div>
+        </div>
+        <span class="float-card-badge">Security</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="6">
+        <span class="float-card-icon">💻</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Web Development</div>
+          <div class="float-card-desc">High-Performance Modern Web Apps</div>
+        </div>
+        <span class="float-card-badge">Modern</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="7">
+        <span class="float-card-icon">✨</span>
+        <div class="float-card-info">
+          <div class="float-card-name">AI Solutions</div>
+          <div class="float-card-desc">Custom Enterprise RAG Workflows</div>
+        </div>
+        <span class="float-card-badge">Custom</span>
+      </a>
+      <a href="#projects" class="float-card" data-idx="8">
+        <span class="float-card-icon">⚙️</span>
+        <div class="float-card-info">
+          <div class="float-card-name">Software Engineering</div>
+          <div class="float-card-desc">Scalable Systems &amp; Clean Architecture</div>
+        </div>
+        <span class="float-card-badge">Scale</span>
+      </a>
+    </div>
+
     <!-- Mega Center Stage Content -->
     <div class="hero-center-content">
       <div class="hero-stage hero-stage-1 active" id="hero-stage-1">
         <h1 class="hero-mega-title">
           <span class="title-cyan">SRI</span><span class="title-white">JITH</span>
         </h1>
+        <div class="hero-scroll-prompt" id="hero-scroll-prompt">
+          <span>Scroll to Explore</span>
+          <span class="scroll-arrow">↓</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1148,11 +1453,12 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     heroCanvas.width = window.innerWidth * dpr;
     heroCanvas.height = window.innerHeight * dpr;
-    renderHeroFrame(Math.round(currentFrameIndex));
+    const smoothedP = (TOTAL_FRAMES > 1) ? currentFrameIndex / (TOTAL_FRAMES - 1) : 0;
+    renderHeroFrame(Math.round(currentFrameIndex), smoothedP);
   }
   window.addEventListener('resize', resizeHeroCanvas);
 
-  function drawScaledImage(img) {
+  function drawScaledImage(img, progress = 0) {
     if (!heroCanvas || !heroCtx) return;
     const cw = heroCanvas.width;
     const ch = heroCanvas.height;
@@ -1163,11 +1469,17 @@
     const aspect = cw / ch;
 
     // ── MOBILE / PORTRAIT SCREENS (Aspect ratio <= 0.95) ──
-    // Retain original full-bleed portrait cover behavior (tested & loved on mobile)
+    // Retain full-bleed portrait cover with subtle forward walking scale and stride bobbing
     if (aspect <= 0.95) {
       heroCtx.imageSmoothingEnabled = true;
       heroCtx.imageSmoothingQuality = 'high';
-      const scale = Math.max(cw / iw, ch / ih);
+
+      // Forward walking camera tracking: subject gently expands as steps advance
+      const walkScale = 1.0 + Math.pow(progress, 0.88) * 0.14;
+      const strideBob = Math.sin(progress * Math.PI * 6) * (ch * 0.006);
+
+      const baseScale = Math.max(cw / iw, ch / ih);
+      const scale = baseScale * walkScale;
       const nw = iw * scale;
       const nh = ih * scale;
       const nx = (cw - nw) / 2;
@@ -1176,10 +1488,10 @@
       if (nh > ch) {
         const targetFaceY = ch * 0.30;
         const faceOffset = nh * 0.20;
-        ny = targetFaceY - faceOffset;
+        ny = targetFaceY - faceOffset + strideBob;
         ny = Math.min(0, Math.max(ch - nh, ny));
       } else {
-        ny = (ch - nh) / 2;
+        ny = (ch - nh) / 2 + strideBob;
       }
 
       heroCtx.drawImage(img, nx, ny, nw, nh);
@@ -1187,7 +1499,7 @@
     }
 
     // ── DESKTOP / WIDESCREEN ENHANCED DUAL-LAYER CINEMA RENDER ──
-    // Eliminates massive 1.8x-3x stretching blur, displaying the full subject in ultra-crisp resolution
+    // Eliminates stretching blur, displaying the full subject in ultra-crisp resolution with forward walking 3D depth
 
     // 1. Ambient Background Layer: Atmospheric blurred & dimmed fill across widescreen
     try {
@@ -1195,7 +1507,7 @@
       if ('filter' in heroCtx) {
         heroCtx.filter = 'blur(45px) brightness(0.35) saturate(1.25)';
       }
-      const bgScale = Math.max(cw / iw, ch / ih);
+      const bgScale = Math.max(cw / iw, ch / ih) * (1.0 + progress * 0.04);
       const bgW = iw * bgScale;
       const bgH = ih * bgScale;
       const bgX = (cw - bgW) / 2;
@@ -1206,60 +1518,65 @@
       // Fallback if browser security or filter differs
     }
 
-    // Dark gradient veil to blend ambient lighting into portfolio theme (#050810)
-    heroCtx.fillStyle = 'rgba(5, 8, 16, 0.42)';
+    // Dark gradient veil to blend ambient lighting into portfolio theme (#05070D)
+    heroCtx.fillStyle = 'rgba(5, 7, 13, 0.44)';
     heroCtx.fillRect(0, 0, cw, ch);
 
-    // 2. Razor-Sharp Foreground Character: Height-fitted native downscaling (crystal clear!)
+    // 2. Razor-Sharp Foreground Character: Height-fitted native downscaling with forward walking animation
     heroCtx.imageSmoothingEnabled = true;
     heroCtx.imageSmoothingQuality = 'high';
 
-    // Scale so height fills the viewport gracefully showing the full suit, tie, hair & sunglasses
-    const fgScale = (ch * 1.02) / ih;
+    // Cinematic forward walking progression:
+    // Scale increases from 1.0x to 1.16x, combined with natural slow-motion stride bobbing
+    const walkScale = 1.0 + Math.pow(progress, 0.88) * 0.16;
+    const strideBob = Math.sin(progress * Math.PI * 6) * (ch * 0.007);
+
+    const baseFgScale = (ch * 1.02) / ih;
+    const fgScale = baseFgScale * walkScale;
     const fgW = iw * fgScale;
     const fgH = ih * fgScale;
     const fgX = (cw - fgW) / 2;
-    const fgY = (ch - fgH) / 2;
+    const fgY = ((ch - fgH) / 2) + strideBob;
 
     heroCtx.drawImage(img, fgX, fgY, fgW, fgH);
 
     // 3. Smooth Edge Feathers: Seamlessly dissolve left/right borders into ambient background
-    const featherWidth = Math.min(100, fgW * 0.22);
+    const featherWidth = Math.min(110, fgW * 0.22);
 
     const leftFade = heroCtx.createLinearGradient(fgX, 0, fgX + featherWidth, 0);
-    leftFade.addColorStop(0, 'rgba(5, 8, 16, 0.95)');
-    leftFade.addColorStop(1, 'rgba(5, 8, 16, 0)');
+    leftFade.addColorStop(0, 'rgba(5, 7, 13, 0.96)');
+    leftFade.addColorStop(1, 'rgba(5, 7, 13, 0)');
     heroCtx.fillStyle = leftFade;
     heroCtx.fillRect(fgX - 5, 0, featherWidth + 5, ch);
 
     const rightFade = heroCtx.createLinearGradient(fgX + fgW - featherWidth, 0, fgX + fgW, 0);
-    rightFade.addColorStop(0, 'rgba(5, 8, 16, 0)');
-    rightFade.addColorStop(1, 'rgba(5, 8, 16, 0.95)');
+    rightFade.addColorStop(0, 'rgba(5, 7, 13, 0)');
+    rightFade.addColorStop(1, 'rgba(5, 7, 13, 0.96)');
     heroCtx.fillStyle = rightFade;
     heroCtx.fillRect(fgX + fgW - featherWidth, 0, featherWidth + 5, ch);
 
     // Top fade for seamless navbar integration
-    const topFade = heroCtx.createLinearGradient(0, 0, 0, 100);
-    topFade.addColorStop(0, 'rgba(5, 8, 16, 0.85)');
-    topFade.addColorStop(1, 'rgba(5, 8, 16, 0)');
+    const topFade = heroCtx.createLinearGradient(0, 0, 0, 110);
+    topFade.addColorStop(0, 'rgba(5, 7, 13, 0.9)');
+    topFade.addColorStop(1, 'rgba(5, 7, 13, 0)');
     heroCtx.fillStyle = topFade;
-    heroCtx.fillRect(0, 0, cw, 100);
+    heroCtx.fillRect(0, 0, cw, 110);
 
     // Bottom fade for text and scroll prompt integration
-    const btmFade = heroCtx.createLinearGradient(0, ch - 140, 0, ch);
-    btmFade.addColorStop(0, 'rgba(5, 8, 16, 0)');
-    btmFade.addColorStop(1, 'rgba(5, 8, 16, 0.9)');
+    const btmFade = heroCtx.createLinearGradient(0, ch - 150, 0, ch);
+    btmFade.addColorStop(0, 'rgba(5, 7, 13, 0)');
+    btmFade.addColorStop(1, 'rgba(5, 7, 13, 0.92)');
     heroCtx.fillStyle = btmFade;
-    heroCtx.fillRect(0, ch - 140, cw, 140);
+    heroCtx.fillRect(0, ch - 150, cw, 150);
   }
 
-  function renderHeroFrame(frameIdx) {
+  function renderHeroFrame(frameIdx, progress = 0) {
     if (!heroCanvas || !heroCtx) return;
     const clampedIdx = Math.max(0, Math.min(TOTAL_FRAMES - 1, frameIdx));
     const img = frames[clampedIdx];
 
     if (img && img.complete && img.naturalWidth > 0) {
-      drawScaledImage(img);
+      drawScaledImage(img, progress);
       return;
     }
 
@@ -1267,19 +1584,113 @@
     for (let offset = 1; offset < 30; offset++) {
       const prev = frames[clampedIdx - offset];
       if (prev && prev.complete && prev.naturalWidth > 0) {
-        drawScaledImage(prev);
+        drawScaledImage(prev, progress);
         return;
       }
       const next = frames[clampedIdx + offset];
       if (next && next.complete && next.naturalWidth > 0) {
-        drawScaledImage(next);
+        drawScaledImage(next, progress);
         return;
       }
     }
   }
 
   const heroStage = document.getElementById('hero-stage-1');
+  const heroScrollPrompt = document.getElementById('hero-scroll-prompt');
   const mainNav = document.querySelector('nav');
+  const leftCards = document.querySelectorAll('#hero-float-left .float-card');
+  const rightCards = document.querySelectorAll('#hero-float-right .float-card');
+
+  // ── BILATERAL FLOATING CARDS SCROLL ENGINE ──
+  function updateFloatingCards(progress) {
+    if (window.innerWidth <= 900) return; // Dedicated mobile optimization
+
+    // Left Column: Technical Skills Stream
+    leftCards.forEach((card, i) => {
+      const enterStart = 0.02 + i * 0.072;
+      const duration = 0.40;
+      const localT = (progress - enterStart) / duration;
+
+      if (localT <= 0 || localT >= 1) {
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+        card.style.transform = 'translate3d(0, 115vh, 0)';
+        return;
+      }
+
+      card.style.pointerEvents = 'auto';
+
+      // Upward vertical traversal
+      const y = 108 - localT * 132;
+
+      // Diagonal drift toward upper-left corner
+      const x = 18 - localT * 40 + Math.sin(i * 1.8) * 10;
+
+      // Subtle 3D tilt & perspective
+      const rotY = 12 - localT * 20;
+      const rotX = 8 - localT * 16;
+      const rotZ = -2 + Math.sin(i * 1.5) * 2;
+
+      // Smooth opacity & scale envelope
+      let opacity = 1.0;
+      let scale = 1.0;
+      if (localT < 0.22) {
+        const pIn = localT / 0.22;
+        opacity = pIn;
+        scale = 0.86 + pIn * 0.14;
+      } else if (localT > 0.74) {
+        const pOut = (localT - 0.74) / 0.26;
+        opacity = 1 - pOut;
+        scale = 1.0 - pOut * 0.1;
+      }
+
+      card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}vh, 0) rotateY(${rotY.toFixed(1)}deg) rotateX(${rotX.toFixed(1)}deg) rotateZ(${rotZ.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+      card.style.opacity = opacity.toFixed(3);
+    });
+
+    // Right Column: Featured Projects Stream
+    rightCards.forEach((card, i) => {
+      const enterStart = 0.03 + i * 0.072;
+      const duration = 0.40;
+      const localT = (progress - enterStart) / duration;
+
+      if (localT <= 0 || localT >= 1) {
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+        card.style.transform = 'translate3d(0, 115vh, 0)';
+        return;
+      }
+
+      card.style.pointerEvents = 'auto';
+
+      // Upward vertical traversal
+      const y = 108 - localT * 132;
+
+      // Diagonal drift toward upper-right corner
+      const x = -18 + localT * 40 - Math.cos(i * 1.8) * 10;
+
+      // Subtle 3D tilt & perspective
+      const rotY = -12 + localT * 20;
+      const rotX = 8 - localT * 16;
+      const rotZ = 2 - Math.cos(i * 1.5) * 2;
+
+      // Smooth opacity & scale envelope
+      let opacity = 1.0;
+      let scale = 1.0;
+      if (localT < 0.22) {
+        const pIn = localT / 0.22;
+        opacity = pIn;
+        scale = 0.86 + pIn * 0.14;
+      } else if (localT > 0.74) {
+        const pOut = (localT - 0.74) / 0.26;
+        opacity = 1 - pOut;
+        scale = 1.0 - pOut * 0.1;
+      }
+
+      card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}vh, 0) rotateY(${rotY.toFixed(1)}deg) rotateX(${rotX.toFixed(1)}deg) rotateZ(${rotZ.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+      card.style.opacity = opacity.toFixed(3);
+    });
+  }
 
   function updateHeroScroll() {
     if (!heroSection) return;
@@ -1292,16 +1703,21 @@
     targetFrameIndex = progress * (TOTAL_FRAMES - 1);
     currentFrameIndex += (targetFrameIndex - currentFrameIndex) * 0.18;
 
-    renderHeroFrame(Math.round(currentFrameIndex));
+    const smoothedP = (TOTAL_FRAMES > 1) ? currentFrameIndex / (TOTAL_FRAMES - 1) : progress;
 
-    // Hide headline text after first scroll
+    renderHeroFrame(Math.round(currentFrameIndex), smoothedP);
+    updateFloatingCards(smoothedP);
+
+    // Hide headline text & scroll prompt after first scroll
     if (progress > 0.025) {
       if (heroStage && !heroStage.classList.contains('fade-out')) heroStage.classList.add('fade-out');
+      if (heroScrollPrompt && !heroScrollPrompt.classList.contains('fade-out')) heroScrollPrompt.classList.add('fade-out');
     } else {
       if (heroStage && heroStage.classList.contains('fade-out')) heroStage.classList.remove('fade-out');
+      if (heroScrollPrompt && heroScrollPrompt.classList.contains('fade-out')) heroScrollPrompt.classList.remove('fade-out');
     }
 
-    // Hide navbar after first scroll and show it again after the hero section
+    // Hide navbar during hero scroll exploration and restore afterwards
     if (mainNav) {
       if (progress > 0.025 && progress < 0.96) {
         mainNav.classList.add('nav-hidden');
